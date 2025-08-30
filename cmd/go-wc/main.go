@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"os"
@@ -8,25 +9,30 @@ import (
 	"unicode/utf8"
 )
 
+const (
+	SingleValueFormat = "\t%d %s\n"
+	DefaultFormat     = "\t%d\t%d\t%d %s\n"
+)
+
 func main() {
 	flags, subject, filename := parseArgs()
 	if flags["bytes"] {
 		byteCount := countBytes(subject)
-		fmt.Printf("\t%d %s\n", byteCount, filename)
+		fmt.Printf(SingleValueFormat, byteCount, filename)
 	} else if flags["words"] {
 		wordCount := countWords(subject)
-		fmt.Printf("\t%d %s\n", wordCount, filename)
+		fmt.Printf(SingleValueFormat, wordCount, filename)
 	} else if flags["lines"] {
 		lineCount := countLines(subject)
-		fmt.Printf("\t%d %s\n", lineCount, filename)
+		fmt.Printf(SingleValueFormat, lineCount, filename)
 	} else if flags["chars"] {
 		charCount := countChars(subject)
-		fmt.Printf("\t%d %s\n", charCount, filename)
+		fmt.Printf(SingleValueFormat, charCount, filename)
 	} else {
 		byteCount := countBytes(subject)
 		wordCount := countWords(subject)
 		lineCount := countLines(subject)
-		fmt.Printf("\t%d\t%d\t%d %s\n", lineCount, wordCount, byteCount, filename)
+		fmt.Printf(DefaultFormat, lineCount, wordCount, byteCount, filename)
 	}
 }
 
@@ -81,13 +87,7 @@ func countWords(b []byte) int {
 }
 
 func countLines(b []byte) int {
-	count := 0
-	for _, line := range strings.Split(string(b), "\n") {
-		if line != "" {
-			count += 1
-		}
-	}
-	return count
+	return bytes.Count(b, []byte{'\n'})
 }
 
 func countChars(b []byte) int {
