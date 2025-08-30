@@ -12,21 +12,21 @@ func main() {
 	flags, subject, filename := parseArgs()
 	if flags["bytes"] {
 		byteCount := countBytes(subject)
-		fmt.Printf("%d %s\n", byteCount, filename)
+		fmt.Printf("\t%d %s\n", byteCount, filename)
 	} else if flags["words"] {
 		wordCount := countWords(subject)
-		fmt.Printf("%d %s\n", wordCount, filename)
+		fmt.Printf("\t%d %s\n", wordCount, filename)
 	} else if flags["lines"] {
 		lineCount := countLines(subject)
-		fmt.Printf("%d %s\n", lineCount, filename)
+		fmt.Printf("\t%d %s\n", lineCount, filename)
 	} else if flags["chars"] {
 		charCount := countChars(subject)
-		fmt.Printf("%d %s\n", charCount, filename)
+		fmt.Printf("\t%d %s\n", charCount, filename)
 	} else {
 		byteCount := countBytes(subject)
 		wordCount := countWords(subject)
 		lineCount := countLines(subject)
-		fmt.Printf("%d %d %d %s\n", byteCount, wordCount, lineCount, filename)
+		fmt.Printf("\t%d\t%d\t%d %s\n", lineCount, wordCount, byteCount, filename)
 	}
 }
 
@@ -81,7 +81,13 @@ func countWords(b []byte) int {
 }
 
 func countLines(b []byte) int {
-	return len(strings.Split(string(b), "\n"))
+	count := 0
+	for _, line := range strings.Split(string(b), "\n") {
+		if line != "" {
+			count += 1
+		}
+	}
+	return count
 }
 
 func countChars(b []byte) int {

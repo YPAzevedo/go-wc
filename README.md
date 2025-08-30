@@ -83,22 +83,22 @@ echo "Hello world" | make run
 ```bash
 # Example with a text file
 $ ./bin/go-wc test2.txt
-3 5 23 test2.txt
+2 8 38 test2.txt
 
 # Count only lines
 $ ./bin/go-wc -l test2.txt  
-3 test2.txt
+2 test2.txt
 
 # Count only words
 $ ./bin/go-wc -w test2.txt
-5 test2.txt
+8 test2.txt
 
 # Using with pipes
 $ cat test2.txt | ./bin/go-wc
-3 5 23
+2 8 38
 
-# UTF-8 character counting
-$ echo "Hello 世界" | ./bin/go-wc -m
+# UTF-8 character counting (without newline)
+$ printf "Hello 世界" | ./bin/go-wc -m
 8
 ```
 
